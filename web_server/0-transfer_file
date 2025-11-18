@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Script that transfers a file from client to server using scp
+#writing a script that transfers a file from my machine to the server
 
-if [ "$#" -lt 4 ]; then
-    echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+#checking to ensure that 4 parameters are passed
+if [ $# -ne 4 ]; then
+    echo  "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY "
     exit 1
 fi
+file="$1"
+server_ip="$2"
+username="$3"
+ssh_key="$4"
 
-PATH_TO_FILE="$1"
-IP="$2"
-USERNAME="$3"
-PATH_TO_SSH_KEY="$4"
-
-scp -o StrictHostKeyChecking=no -i "$PATH_TO_SSH_KEY" "$PATH_TO_FILE" "$USERNAME@$IP:~/"
+#ensuring the file is securely copied using scp
+#disabling host key checking usinf the -o flag
+scp -o StrictHostKeyChecking=no -i "$ssh_key" "$file" "$username@$server_ip":~/
