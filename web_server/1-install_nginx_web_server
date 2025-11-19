@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#configuring my nginx server
+
+#update package list
+sudo apt update -y
+
+#install nginx
+sudo apt install nginx -y
+
+#Allow Nginx through any firewall
+sudo ufw allow 'Nginx HTTP'
+
+#kill any running nginx intance that may be using port 80
+sudo pkill -9 nginx
+
+#ensure nginx is running
+sudo service nginx start
+
+#replace any text in the file with the required text
+echo "Holberton School" | sudo tee /var/www/html/index.html
+
+#restart nginx to update the changes
+sudo service nginx reload
