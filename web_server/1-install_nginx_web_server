@@ -10,9 +10,6 @@ sudo apt install nginx -y
 #Allow Nginx through any firewall
 sudo ufw allow 'Nginx HTTP'
 
-#kill any running nginx intance that may be using port 80
-sudo pkill -9 nginx
-
 #ensure nginx is running
 sudo service nginx start
 
