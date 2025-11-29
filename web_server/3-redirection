@@ -1,27 +1,16 @@
 #!/usr/bin/env bash
-#installing nginx 
+# Installs Nginx with the following configurations:
+#+    Listens on port 80.
+#+    Returns a page containing "Holberton School" when queried
+#++    at the root with a curl GET request.
 
-sudo apt update -y -qq
-sudo apt install nginx -y
+sudo apt-get update 
+sudo apt-get install -y nginx 
 
-#bypassing the firewall
-sudo ufw allow 'NGINX HTTP'
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-#starting nginx
-sudo service nginx start
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
 
-#giving the owner ownership to website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-available/default
 
-# Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-
-# Creating new index
-echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
-
-# Setting up /redirect_me to a youtube video
-sudo sed -i '24i\       rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
-
-#reload nginx
-sudo service nginx reload
+sudo service nginx restart
