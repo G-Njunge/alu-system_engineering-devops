@@ -1,9 +1,6 @@
-# This Puppet manifest restores a missing WordPress file that causes Apache to throw a 500 error
+# Fixes bad `phpp` extensions to `php` in the WordPress file `wp-settings.php`.
 
-file { '/var/www/html/wp-settings.php':
-  ensure => file,
-  source => '/usr/share/wordpress/wp-settings.php',
-  owner  => 'www-data',
-  group  => 'www-data',
-  mode   => '0644',
+exec { 'fix-wordpress':
+  command => 'sed -i s/phpp/php/g /var/www/html/wp-settings.php',
+  path    => '/usr/local/bin/:/bin/'
 }
