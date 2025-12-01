@@ -1,25 +1,7 @@
 #!/usr/bin/env bash
-# Fix Nginx so it runs as nginx user and listens on port 8080
-
-# 1. Install Nginx
-apt-get update -y
-apt-get install -y nginx
-
-# 2. Ensure nginx user exists
-id -u nginx &>/dev/null || useradd -r -s /usr/sbin/nologin nginx
-
-# 3. Change master process to run as nginx
-sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
-
-# 4. Change all ports from 80 -> 8080
-sed -i 's/listen 80;/listen 8080;/g' /etc/nginx/sites-enabled/default
-sed -i 's/listen \[::\]:80;/listen [::]:8080;/g' /etc/nginx/sites-enabled/default
-
-# 5. Fix permissions
-chown -R nginx:nginx /var/log/nginx /var/lib/nginx /var/cache/nginx /var/run
-
-# 6. Stop any running Nginx
-pkill nginx
-
-# 7. Start Nginx as nginx user
-sudo -u nginx nginx -g 'daemon off;'
+# Fixes a web server to run Nginx as the nginx user listening on port 8080.
+sed -i "s/#user www-data/user nginx/" /etc/nginx/nginx.conf
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/nginx.conf
+pkill apache2
+sudo -u nginx service nginx start
